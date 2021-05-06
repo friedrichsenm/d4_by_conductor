@@ -191,15 +191,15 @@ for i in [2, -2, 5, -5, 10, -10, -1, -7]:
 
     remove_rows = []
     for x in range(6):
-        if D_L_K_rows[x][1] == 0 and D_L_K_rows[x][2] == 0 and D_L_K_rows[3] == 0:
+        if D_L_K_rows[x][1] == 0 and D_L_K_rows[x][2] == 0 \
+            and D_L_K_rows[x][3] == 0:
             remove_rows.append(x)
         for y in range(1,4):
-            print(D_L_K_rows[x][y] == 0)
             D_L_K_rows[x][y] /= disc_weight
 
+    remove_rows.reverse()
     for x in remove_rows:
-        print(x)
-        D_L_K_rows.pop(x)
+        out = D_L_K_rows.pop(x)
 
     print(K)
     table(
@@ -207,3 +207,4 @@ for i in [2, -2, 5, -5, 10, -10, -1, -7]:
         header_row=['', 'D_2(\\Phi(K)) = 2^0', '2^2', '2^3'],
         frame=True
     )
+    print()
