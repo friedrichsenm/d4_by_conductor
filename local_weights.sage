@@ -158,12 +158,12 @@ for i in [2, -2, 5, -5, 10, -10, -1, -7]:
     K = QuadraticField(i)
     disc_weight = 0
     D_L_K_rows = [
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0],
-        [0,0,0]
+        ['D_2(L/K) = 2^0',0,0,0],
+        ['2^2',0,0,0],
+        ['2^3',0,0,0],
+        ['2^4',0,0,0],
+        ['2^5',0,0,0],
+        ['2^6',0,0,0]
     ]
     for rep in local_quad_reps(K):
         relative_disc_2 = two_part_disc(rep)
@@ -183,15 +183,27 @@ for i in [2, -2, 5, -5, 10, -10, -1, -7]:
         else:
             row_index = two_power - 1
         if flipped_two_power == 0:
-            col_index = 0
+            col_index = 1
         else:
-            col_index = flipped_two_power - 1
+            col_index = flipped_two_power
 
         D_L_K_rows[row_index][col_index] += 1/relative_disc_2.norm()
 
+    remove_rows = []
     for x in range(6):
-        for y in range(3):
-             D_L_K_rows[x][y] /= disc_weight
+        if D_L_K_rows[x][1] == 0 and D_L_K_rows[x][2] == 0 and D_L_K_rows[3] == 0:
+            remove_rows.append(x)
+        for y in range(1,4):
+            print(D_L_K_rows[x][y] == 0)
+            D_L_K_rows[x][y] /= disc_weight
+
+    for x in remove_rows:
+        print(x)
+        D_L_K_rows.pop(x)
 
     print(K)
-    table(D_L_K_rows)
+    table(
+        D_L_K_rows,
+        header_row=['', 'D_2(\\Phi(K)) = 2^0', '2^2', '2^3'],
+        frame=True
+    )
