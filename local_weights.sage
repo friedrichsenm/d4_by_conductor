@@ -166,7 +166,11 @@ def local_quad_reps(K):
 
 for i in [2, -2, 5, -5, 10, -10, -1, -7]:
     K = QuadraticField(i)
-    disc_weight = 0
+    D_K = gcd(8,abs(K.discriminant()))
+    if i == -7: # 2 splits in K(\sqrt(-7))
+        aut_weight = 4
+    else:
+        aut_weight = 2
     D_L_K_rows = [
         ['D_2(L/K) = 2^0',0,0,0],
         ['2^2',0,0,0],
@@ -177,7 +181,6 @@ for i in [2, -2, 5, -5, 10, -10, -1, -7]:
     ]
     for rep in local_quad_reps(K):
         relative_disc_2 = two_part_disc(rep)
-        disc_weight += 1/relative_disc_2.norm()
         if relative_disc_2.norm() == 1:
             two_power = 0
         else:
@@ -197,15 +200,14 @@ for i in [2, -2, 5, -5, 10, -10, -1, -7]:
         else:
             col_index = flipped_two_power
 
-        D_L_K_rows[row_index][col_index] += 1/relative_disc_2.norm()
+        D_L_K_rows[row_index][col_index] += \
+            1/(2*aut_weight * D_K*relative_disc_2.norm())
 
     remove_rows = []
     for x in range(6):
         if D_L_K_rows[x][1] == 0 and D_L_K_rows[x][2] == 0 \
             and D_L_K_rows[x][3] == 0:
             remove_rows.append(x)
-        for y in range(1,4):
-            D_L_K_rows[x][y] /= disc_weight
 
     remove_rows.reverse()
     for x in remove_rows:
